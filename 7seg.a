@@ -1,0 +1,44 @@
+ORG 0000H
+
+MOV R0,#00H        ; counter = 0
+MOV DPTR,#TABLE    ; point to lookup table
+
+MAIN:
+    MOV A,R0
+    MOVC A,@A+DPTR
+    MOV P2,A       ; send data to Port 2
+    ACALL DELAY
+
+    INC R0
+    CJNE R0,#10H,MAIN
+    MOV R0,#00H
+    SJMP MAIN
+
+; Delay Subroutine
+DELAY:
+    MOV R2,#0FFH
+D1: MOV R3,#0FFH
+D2: DJNZ R3,D2
+    DJNZ R2,D1
+    RET
+
+; 7-segment codes for Common Anode
+TABLE:
+    DB 0C0H
+    DB 0F9H
+    DB 0A4H
+    DB 0B0H
+    DB 099H
+    DB 092H
+    DB 082H
+    DB 0F8H
+    DB 080H
+    DB 090H
+    DB 088H
+    DB 083H
+    DB 0C6H
+    DB 0A1H
+    DB 086H
+    DB 08EH
+
+END
